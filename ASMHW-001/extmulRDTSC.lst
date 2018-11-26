@@ -1,0 +1,26 @@
+     1                                  ; 16bit multiplication
+     2                                  [org 0x0100]
+     3                                  
+     4 00000000 EB00                    	jmp start
+     5                                  start: 
+     6 00000002 B110                    	mov cl, 16 
+     7 00000004 8B16[2F00]              	mov dx, [multiplier] 
+     8                                  checkbit: 
+     9 00000008 D1EA                    	SHR dx, 1 
+    10 0000000A 730E                    	jnc skip 
+    11 0000000C A1[2B00]                	mov ax, [multiplicand]
+    12 0000000F 0106[3100]              	add [result], ax 
+    13 00000013 A1[2D00]                	mov ax, [multiplicand + 2]
+    14 00000016 1106[3300]              	adc [result + 2], ax 
+    15                                  skip: 
+    16 0000001A D126[2B00]              	SHL word [multiplicand], 1
+    17 0000001E D116[2D00]              	RCL word [multiplicand + 2], 1 
+    18 00000022 FEC9                    	dec cl 
+    19 00000024 75E2                    	jnz checkbit 
+    20                                  
+    21 00000026 B8004C                  mov ax, 0x4c00 
+    22 00000029 CD21                    INT 0x21
+    23                                  
+    24 0000002B 14050000                multiplicand: dd 1300
+    25 0000002F F401                    multiplier: dw 500
+    26 00000031 00000000                result: dd 0 

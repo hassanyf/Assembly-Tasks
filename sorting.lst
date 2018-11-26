@@ -1,0 +1,22 @@
+     1                                  [org 0x0100]
+     2                                  
+     3 00000000 B90900                  	mov cx, 9
+     4                                  there:
+     5 00000003 31DB                    	xor bx, bx
+     6                                  here:
+     7 00000005 8A87[2700]              	mov al, [NUMS + bx]
+     8 00000009 3A87[2800]              	cmp al, [NUMS + bx + 1]
+     9 0000000D 770E                    	ja noswap
+    10 0000000F 8AA7[2800]              	mov ah, [NUMS + bx + 1]
+    11 00000013 8887[2800]              	mov [NUMS + bx + 1], al
+    12 00000017 88A7[2700]              	mov [NUMS + bx], ah
+    13 0000001B E2E6                    	loop there
+    14                                  noswap:
+    15 0000001D 43                      	inc bx
+    16 0000001E 83FB09                  	cmp bx, 9
+    17 00000021 75E2                    	jne here
+    18 00000023 E2DE                    	loop there 
+    19                                  
+    20 00000025 CD21                    INT 0x21
+    21                                  
+    22 00000027 253001050710            NUMS: db 25h, 30h, 1h, 5h, 7h, 10h
